@@ -1,0 +1,21 @@
+/node_modules/
+/build/
+
+contracts/lib
+
+notes
+
+node_modules
+
+#Buidler files
+cache
+artifacts
+cache/
+typechain/
+coverage
+coverage.json
+.DS_Store
+yarn-error.log
+yarn.lock
+secrets.json
+secretsduffles.json
