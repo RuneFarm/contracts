@@ -366,7 +366,7 @@ contract RuneShards is
      * @param _rune Address of Rune.
      */
     function setRune(IERC20 _rune) external onlyRole(DEV_ROLE) {
-        require(block.chainid == 1 || block.chainid == 56 || block.chainid == 137);
+        require(block.chainid != 1 && block.chainid != 56 && block.chainid != 137);
 
         rune = _rune;
     }
