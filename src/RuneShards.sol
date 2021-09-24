@@ -409,7 +409,7 @@ contract RuneShards is
         internal
         override(ERC20, ERC20Votes)
     {
-        // Cannot mint
+        // Cannot burn
     }
 
     /**
@@ -419,7 +419,7 @@ contract RuneShards is
         internal
         override(ERC20, ERC20Votes)
     {
-        // Cannot burn
+        // Cannot mint
     }
 
     /**
