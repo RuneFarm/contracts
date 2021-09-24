@@ -84,7 +84,6 @@ describe("Rune Shards", async () => {
             excluded.push(runeShards.address)
 
             await runeShards.connect(deployer).grantRole(await runeShards.DEV_ROLE(), dev.address)
-            await runeShards.connect(deployer).grantRole(await runeShards.PAUSER_ROLE(), dev.address)
 
             expect(await runeShards.totalSupply()).to.equal(runeShardsTotalSupply)
             expect(runeShardsTotalSupply).to.equal(BigNumber.from("192999312886826396393950000"))
@@ -202,16 +201,6 @@ describe("Rune Shards", async () => {
             await expectExcluded()
         })
 
-        it("shouldn't allow non-PAUSER_ROLE to call pause", async () => {
-            expect(await runeShards.paused()).to.equal(false)
-
-            await expect(
-                runeShards.connect(alice).pause()
-            ).to.be.revertedWith(await accessControlErrorString(alice, runeShards.PAUSER_ROLE))
-
-            expect(await runeShards.paused()).to.equal(false)
-        })
-
         it("shouldn't allow non-DEV_ROLE to call remove bot", async () => {
             await expectBots()
 
@@ -250,20 +239,6 @@ describe("Rune Shards", async () => {
             ).to.be.revertedWith(await accessControlErrorString(alice, runeShards.DEV_ROLE))
         })
 
-        it("shouldn't allow non-PAUSER_ROLE to call unpause", async () => {
-            expect(await runeShards.paused()).to.equal(false)
-            await (runeShards.connect(dev).pause())
-            expect(await runeShards.paused()).to.equal(true)
-
-            await expect(
-                runeShards.connect(alice).unpause()
-            ).to.be.revertedWith(await accessControlErrorString(alice, runeShards.PAUSER_ROLE))
-
-            expect(await runeShards.paused()).to.equal(true)
-            await (runeShards.connect(dev).unpause())
-            expect(await runeShards.paused()).to.equal(false)
-        })
-
         it("should allow DEV_ROLE to call add bot", async () => {
             await expectBots()
 
@@ -280,14 +255,6 @@ describe("Rune Shards", async () => {
             excluded.push(bob.address)
 
             await expectExcluded()
-        })
-
-        it("should allow PAUSER_ROLE to call pause", async () => {
-            expect(await runeShards.paused()).to.equal(false)
-
-            await runeShards.connect(dev).pause()
-
-            expect(await runeShards.paused()).to.equal(true)
         })
 
         it("should allow DEV_ROLE to call remove bot", async () => {
@@ -318,12 +285,6 @@ describe("Rune Shards", async () => {
 
         it("should allow DEV_ROLE to call set rune", async () => {
             await runeShards.connect(dev).setRune(runeToken.address)
-        })
-
-        it("should allow PAUSER_ROLE to call unpause", async () => {
-            expect(await runeShards.paused()).to.equal(true)
-            await (runeShards.connect(dev).unpause())
-            expect(await runeShards.paused()).to.equal(false)
         })
     })
 
@@ -891,44 +852,6 @@ describe("Rune Shards", async () => {
             await runeShards.connect(dev).removeBot(alice.address)
             await runeShards.connect(dev).removeBot(alice.address)
             await expectBots()
-        })
-    })
-
-    context("Pause and unpause", async () => {
-        it("should pause", async () => {
-            await runeShards.connect(dev).pause()
-            expect(await runeShards.paused()).to.equal(true)
-        })
-
-        it("shouldn't transfer when paused", async () => {
-            await expect(
-                runeShards.connect(alice).transfer(bob.address, "10000")
-            ).to.be.revertedWith("Pausable: paused")
-        })
-
-        it("shouldn't swap when paused", async () => {
-            await runeToken.connect(alice).approve(runeShards.address, "10000")
-
-            await expect(
-                runeShards.connect(alice).swap("10000")
-            ).to.be.revertedWith("Pausable: paused")
-        })
-
-        it("should unpause", async () => {
-            await runeShards.connect(dev).unpause()
-            expect(await runeShards.paused()).to.equal(false)
-        })
-
-        it("should transfer when unpaused", async () => {
-            await expect(() => runeShards.connect(alice).transfer(bob.address, "10000"))
-                .to.changeTokenBalances(runeShards, [alice, bob, vault, charity, dev], ["-10000", "9900", "80", "10", "10"])
-        })
-
-        it("should swap when unpaused", async () => {
-            await runeToken.connect(alice).approve(runeShards.address, "10000")
-
-            await expect(() => runeShards.connect(alice).swap("10000"))
-                .to.changeTokenBalance(runeShards, alice, "100000000")
         })
     })
 

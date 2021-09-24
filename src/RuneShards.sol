@@ -54,7 +54,6 @@ contract RuneShards is
     ERC20Burnable,
     ERC20Permit,
     ERC20Votes,
-    Pausable,
     AccessControl
 {
     using EnumerableSet for EnumerableSet.AddressSet;
@@ -62,8 +61,6 @@ contract RuneShards is
 
     /* SECTION: Public constants. */
 
-    ///@notice Identifier for the role able to pause and unpause transfers.
-    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     ///@notice Identifier for the role able to perform dev functions.
     bytes32 public constant DEV_ROLE = keccak256("DEV_ROLE");
 
@@ -145,7 +142,7 @@ contract RuneShards is
             called, and so this is the total amount of RXS that can
             ever exist.
         */
-        _mint(address(this), 192999312886826396393950000);
+        super._mint(address(this), 192999312886826396393950000);
     }
 
 
@@ -274,13 +271,6 @@ contract RuneShards is
     }
 
     /**
-     * @notice Pause token transfers - for emergency use only.
-     */
-    function pause() public onlyRole(PAUSER_ROLE) {
-        _pause();
-    }
-
-    /**
      * @notice Remove an address from the set of addresses subject to bot fees.
      *
      * @param _bot The address to remove.
@@ -383,20 +373,9 @@ contract RuneShards is
         rune = _rune;
     }
 
-    /**
-     * @notice Unpause token transfers.
-     */
-    function unpause() public onlyRole(PAUSER_ROLE) {
-        _unpause();
-    }
-
-
     /* SECTION: Hooks. */
 
     /**
-     * @notice Require the contract to be in the unpaused state before
-     * transferring.
-     *
      * @dev Hook that is called before any transfer of tokens. This includes
      * minting and burning.
      */
@@ -404,7 +383,7 @@ contract RuneShards is
         address from,
         address to,
         uint256 amount
-    ) internal override whenNotPaused {
+    ) internal override {
         super._beforeTokenTransfer(from, to, amount);
     }
 
@@ -432,7 +411,7 @@ contract RuneShards is
         internal
         override(ERC20, ERC20Votes)
     {
-        super._burn(account, amount);
+        // Cannot mint
     }
 
     /**
@@ -442,7 +421,7 @@ contract RuneShards is
         internal
         override(ERC20, ERC20Votes)
     {
-        super._mint(to, amount);
+        // Cannot burn
     }
 
     /**
