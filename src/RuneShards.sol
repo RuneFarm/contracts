@@ -362,11 +362,11 @@ contract RuneShards is
 
     /**
      * @notice Set address of Rune.
-     * @dev The address by default is the mainnet address, use this to change if testing or deploying to testnet. Cannot be called on Ethereum, BSC, or Polygon mainnet.
+     * @dev The address by default is the mainnet address, use this to change if testing or deploying to testnet. Cannot be called on mainnet.
      * @param _rune Address of Rune.
      */
     function setRune(IERC20 _rune) external onlyRole(DEV_ROLE) {
-        require(block.chainid != 1 && block.chainid != 56 && block.chainid != 137);
+        require(block.chainid != 56);
 
         rune = _rune;
     }
