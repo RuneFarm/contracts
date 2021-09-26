@@ -464,20 +464,6 @@ contract RuneShards is
         rune = _rune;
     }
 
-    /* SECTION: Hooks. */
-
-    /**
-     * @dev Hook that is called before any transfer of tokens. This includes
-     * minting and burning.
-     */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal override {
-        super._beforeTokenTransfer(from, to, amount);
-    }
-
 
     /* SECTION: Overrides. */
 
