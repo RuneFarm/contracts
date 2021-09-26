@@ -520,14 +520,7 @@ contract RuneShards is
     ) internal override {
         require(
             amount <= maxTransferAmount,
-            string(
-                abi.encodePacked(
-                    "Requested transfer of ",
-                    amount,
-                    " is above maximum transfer amount of ",
-                    maxTransferAmount
-                )
-            )
+            "Requested transfer is above maximum transfer amount"
         );
 
         uint256 remainingAmount = amount;
