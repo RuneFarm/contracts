@@ -69,6 +69,15 @@ contract RuneShards is
     ///@notice Standard figure for basis points.
     uint256 public constant BASIS = 10000;
 
+    /**
+    * @notice The minimum that can be set as the maximum token transfer amount.
+    *
+    * @dev This is 2000000 * 1e18 (= just over 1% of supply).
+    *   This can be modified but never lowered below this amount.
+    *
+    **/
+    uint256 public constant MIN_MAX_TRANSFER_AMOUNT = 2000000 ether;
+
 
     /* SECTION: Public fields. */
 
@@ -93,6 +102,9 @@ contract RuneShards is
     ///@notice Bot fee address.
     address public botAddress =
         address(0x602a27bBf954b6945534a84C8c88FB8cA9E92B7F);
+
+    ///@notice The maximum token transfer amount.
+    uint256 public maxTransferAmount = MIN_MAX_TRANSFER_AMOUNT;
 
 
     /* SECTION: Private constants. */
@@ -307,6 +319,22 @@ contract RuneShards is
     }
 
     /**
+     * @notice Change the maximum transfer amount.
+     *
+     * @dev New amount cannot be less than {MIN_MAX_TRANSFER_AMOUNT}.
+     *
+     * @param _maxTransferAmount The new maximum transfer amount.
+     */
+    function changeMaxTransferAmount(uint256 _maxTransferAmount) external onlyRole(DEV_ROLE) {
+        require(
+            _maxTransferAmount >= MIN_MAX_TRANSFER_AMOUNT,
+            "New maximum transfer amount too low."
+        );
+
+        maxTransferAmount = _maxTransferAmount;
+    }
+
+    /**
      * @notice Remove an address from the set of addresses subject to bot fees.
      *
      * @param _bot The address to remove.
@@ -476,6 +504,18 @@ contract RuneShards is
         address recipient,
         uint256 amount
     ) internal override {
+        require(
+            amount <= maxTransferAmount,
+            string(
+                abi.encodePacked(
+                    "Requested transfer of ",
+                    amount,
+                    " is above maximum transfer amount of ",
+                    maxTransferAmount
+                )
+            )
+        );
+
         uint256 remainingAmount = amount;
 
         if (!excluded.contains(sender) && !excluded.contains(recipient)) {
