@@ -14,7 +14,7 @@ import { RuneToken } from "../typechain/RuneToken"
 import { RuneShards } from "../typechain/RuneShards"
 
 // Other contracts
-import { BigNumber, ContractReceipt } from "ethers";
+import { BigNumber } from "ethers";
 import { describe } from "mocha";
 
 let runeTokenFactory: ContractFactory
