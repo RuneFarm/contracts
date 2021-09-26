@@ -9,7 +9,7 @@ const { expect } = chai
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address"
 import { ContractFactory } from "@ethersproject/contracts"
 
-// Rune.farm contracts
+// Rune.game contracts
 import { RuneToken } from "../typechain/RuneToken"
 import { RuneShards } from "../typechain/RuneShards"
 
