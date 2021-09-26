@@ -78,6 +78,7 @@ describe("Rune Shards", async () => {
             runeShardsFactory = await ethers.getContractFactory("RuneShards", deployer)
 
             runeShards = (await runeShardsFactory.deploy(
+                zeroAddress // mintTo
             )) as RuneShards
             await runeShards.deployed()
 
