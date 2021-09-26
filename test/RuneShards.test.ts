@@ -338,6 +338,16 @@ describe("Rune Shards", async () => {
     })
 
     context("Partial swap", async () => {
+        it("shouldn't allow too large swaps", async () => {
+            const swapAmount = ethers.utils.parseEther("301")
+
+            await runeToken.connect(alice).approve(runeShards.address, swapAmount)
+
+            await expect(
+                runeShards.connect(alice).swap(swapAmount)
+            ).to.be.revertedWith("Requested transfer is above maximum transfer amount")
+        })
+
         it("should swap correctly", async () => {
             expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply)
 
