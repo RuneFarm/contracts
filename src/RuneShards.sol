@@ -99,6 +99,11 @@ contract RuneShards is
     ///@notice The address to send burnt tokens to.
     address private constant BURN_ADDRESS = address(0xdEaD);
 
+    ///@notice The chain id for the Binance Smart Chain.
+    uint256 private constant BSC_CHAIN_ID = 56;
+
+    ///@notice The chain id for hardhat tests.
+    uint256 private constant HARDHAT_CHAIN_ID = 31337;
 
     /* SECTION: Private fields. */
 
