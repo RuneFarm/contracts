@@ -216,6 +216,12 @@ describe("Rune Shards", async () => {
                 BigNumber.from("2000000").mul(BigNumber.from("10").pow("18")))
         })
 
+        it("shouldn't allow non-DEV_ROLE to call disabled mint function", async () => {
+            await expect(
+                runeShards.connect(alice).mint(deadAddress, 1)
+            ).to.be.revertedWith(await accessControlErrorString(alice, runeShards.DEV_ROLE))
+        })
+
         it("shouldn't allow non-DEV_ROLE to call remove bot", async () => {
             await expectBots()
 
@@ -292,6 +298,12 @@ describe("Rune Shards", async () => {
 
             expect(await runeShards.maxTransferAmount()).to.equal(
                 BigNumber.from("3000000").mul(BigNumber.from("10").pow("18")))
+        })
+
+        it("should allow non-DEV_ROLE to call disabled mint function", async () => {
+            await expect(
+                runeShards.connect(dev).mint(deadAddress, 1)
+            ).to.be.revertedWith("This token cannot be minted")
         })
 
         it("should allow DEV_ROLE to call remove bot", async () => {
