@@ -403,11 +403,11 @@ contract RuneShards is
 
     /**
      * @notice Set address of Rune.
-     * @dev The address by default is the mainnet address, use this to change if testing or deploying to testnet. Cannot be called on mainnet.
+     * @dev The address by default is the BSC mainnet address, use this to change if testing or deploying to testnet. Cannot be called on mainnet.
      * @param _rune Address of Rune.
      */
     function setRune(IERC20 _rune) external onlyRole(DEV_ROLE) {
-        require(block.chainid != 56);
+        require(BSC_CHAIN_ID != block.chainid);
 
         rune = _rune;
     }
