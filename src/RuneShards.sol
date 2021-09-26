@@ -44,6 +44,7 @@ pragma solidity =0.8.4;
 import "openzeppelin-contracts-v0.8/token/ERC20/ERC20.sol";
 import "openzeppelin-contracts-v0.8/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "openzeppelin-contracts-v0.8/token/ERC20/extensions/ERC20Votes.sol";
+import "openzeppelin-contracts-v0.8/security/ReentrancyGuard.sol";
 import "openzeppelin-contracts-v0.8/access/AccessControl.sol";
 import "openzeppelin-contracts-v0.8/utils/structs/EnumerableSet.sol";
 
@@ -54,7 +55,8 @@ contract RuneShards is
     ERC20,
     ERC20Permit,
     ERC20Votes,
-    AccessControl
+    AccessControl,
+    ReentrancyGuard
 {
     using EnumerableSet for EnumerableSet.AddressSet;
 
@@ -186,7 +188,7 @@ contract RuneShards is
      *
      * @param amount Amount of RUNE to swap.
      */
-    function swap(uint256 amount) external {
+    function swap(uint256 amount) external nonReentrant {
         // Only allow swapping on home chain (BSC) or when testing.
         require(
             BSC_CHAIN_ID == block.chainid || HARDHAT_CHAIN_ID == block.chainid
