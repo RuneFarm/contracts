@@ -39,7 +39,7 @@
                                '╙╙▀▀████████████████▀▀▀╙─ 
 */
 
-pragma solidity ^0.8.4;
+pragma solidity =0.8.4;
 
 import "openzeppelin-contracts-v0.8/token/ERC20/ERC20.sol";
 import "openzeppelin-contracts-v0.8/token/ERC20/extensions/draft-ERC20Permit.sol";
