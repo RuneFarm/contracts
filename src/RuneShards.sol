@@ -385,7 +385,7 @@ contract RuneShards is
      * @dev Does not allow the rescue of RXS for obvious reasons!
      * @param token Address of the token to rescue.
      */
-    function rescueTokens(IERC20 token) external onlyRole(DEV_ROLE) {
+    function rescueTokens(IERC20 token) external onlyRole(DEV_ROLE) nonReentrant {
         require(
             address(token) != address(this),
             "RXS cannot be rescued"
