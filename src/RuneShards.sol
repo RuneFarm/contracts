@@ -383,7 +383,10 @@ contract RuneShards is
      * @param token Address of the token to rescue.
      */
     function rescueTokens(IERC20 token) external onlyRole(DEV_ROLE) {
-        require(address(token) != address(this));
+        require(
+            address(token) != address(this),
+            "RXS cannot be rescued"
+        );
 
         uint256 balance = token.balanceOf(address(this));
         token.transfer(_msgSender(), balance);
