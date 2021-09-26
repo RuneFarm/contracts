@@ -2133,3 +2133,25 @@ describe("Rune Shards", async () => {
         })
     })
 })
+
+describe("Rune Shards on other blockchain", async () => {
+    before(async () => {
+        {
+            runeShardsFactory = await ethers.getContractFactory("RuneShards", deployer)
+
+            runeShards = (await runeShardsFactory.deploy(
+                receiver.address // mintTo
+            )) as RuneShards
+            await runeShards.deployed()
+
+            expect(await runeShards.totalSupply()).to.equal(runeShardsTotalSupply)
+            expect(runeShardsTotalSupply).to.equal(BigNumber.from("192999312886826396393950000"))
+        }
+    })
+
+    context("Mint receiver", async () => {
+        it("should have minted to the receiver", async () => {
+            expect(await runeShards.balanceOf(receiver.address)).to.equal(runeShardsTotalSupply)
+        })
+    })
+})
