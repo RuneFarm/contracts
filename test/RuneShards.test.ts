@@ -204,6 +204,18 @@ describe("Rune Shards", async () => {
             await expectExcluded()
         })
 
+        it("shouldn't allow non-DEV_ROLE to call change max transfer amount", async () => {
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("2000000").mul(BigNumber.from("10").pow("18")))
+
+            await expect(
+                runeShards.connect(alice).changeMaxTransferAmount("1")
+            ).to.be.revertedWith(await accessControlErrorString(alice, runeShards.DEV_ROLE))
+
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("2000000").mul(BigNumber.from("10").pow("18")))
+        })
+
         it("shouldn't allow non-DEV_ROLE to call remove bot", async () => {
             await expectBots()
 
@@ -260,6 +272,28 @@ describe("Rune Shards", async () => {
             await expectExcluded()
         })
 
+        it("should allow DEV_ROLE to call change max transfer amount", async () => {
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("2000000").mul(BigNumber.from("10").pow("18")))
+
+            await runeShards.connect(dev).changeMaxTransferAmount("3000000000000000000000000")
+
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("3000000").mul(BigNumber.from("10").pow("18")))
+        })
+
+        it("shouldn't allow DEV_ROLE to set change max transfer amount too low", async () => {
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("3000000").mul(BigNumber.from("10").pow("18")))
+
+            await expect(
+                runeShards.connect(dev).changeMaxTransferAmount("1999999999999999999999999")
+            ).to.be.revertedWith("New maximum transfer amount too low.")
+
+            expect(await runeShards.maxTransferAmount()).to.equal(
+                BigNumber.from("3000000").mul(BigNumber.from("10").pow("18")))
+        })
+
         it("should allow DEV_ROLE to call remove bot", async () => {
             await expectBots()
 
@@ -295,7 +329,7 @@ describe("Rune Shards", async () => {
         it("should swap correctly", async () => {
             expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply)
 
-            const swapAmount = ethers.utils.parseEther("200")
+            const swapAmount = ethers.utils.parseEther("300")
             const shardAmount = swapAmount.mul("10000")
 
             await runeToken.connect(alice).approve(runeShards.address, swapAmount)
@@ -323,11 +357,11 @@ describe("Rune Shards", async () => {
             ).to.emit(runeShards, "Swap").withArgs(alice.address, shardAmount)
             expect(await runeShards.totalSupply()).to.equal(runeShardsTotalSupply)
             
-            expect(await runeToken.balanceOf(deadAddress)).to.equal(runeBurnt.add(ethers.utils.parseEther("200")).add(swapAmount))
-            expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply.sub(ethers.utils.parseEther("200")).sub(swapAmount))
+            expect(await runeToken.balanceOf(deadAddress)).to.equal(runeBurnt.add(ethers.utils.parseEther("300")).add(swapAmount))
+            expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply.sub(ethers.utils.parseEther("300")).sub(swapAmount))
 
-            expect(await runeShards.balanceOf(alice.address)).to.equal(ethers.utils.parseEther("200").mul("10000").add(shardAmount))
-            expect(await runeShards.balanceOf(runeShards.address)).to.equal(runeShardsTotalSupply.sub(ethers.utils.parseEther("200").mul("10000")).sub(shardAmount))
+            expect(await runeShards.balanceOf(alice.address)).to.equal(ethers.utils.parseEther("300").mul("10000").add(shardAmount))
+            expect(await runeShards.balanceOf(runeShards.address)).to.equal(runeShardsTotalSupply.sub(ethers.utils.parseEther("300").mul("10000")).sub(shardAmount))
         })
     })
 
