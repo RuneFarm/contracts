@@ -44,7 +44,6 @@ pragma solidity =0.8.4;
 import "openzeppelin-contracts-v0.8/token/ERC20/ERC20.sol";
 import "openzeppelin-contracts-v0.8/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "openzeppelin-contracts-v0.8/token/ERC20/extensions/ERC20Votes.sol";
-import "openzeppelin-contracts-v0.8/security/Pausable.sol";
 import "openzeppelin-contracts-v0.8/access/AccessControl.sol";
 import "openzeppelin-contracts-v0.8/utils/structs/EnumerableSet.sol";
 
