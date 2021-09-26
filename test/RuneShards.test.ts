@@ -294,7 +294,7 @@ describe("Rune Shards", async () => {
 
             await expect(
                 runeShards.connect(dev).changeMaxTransferAmount("1999999999999999999999999")
-            ).to.be.revertedWith("New maximum transfer amount too low.")
+            ).to.be.revertedWith("New maximum transfer amount too low")
 
             expect(await runeShards.maxTransferAmount()).to.equal(
                 BigNumber.from("3000000").mul(BigNumber.from("10").pow("18")))

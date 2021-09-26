@@ -328,7 +328,7 @@ contract RuneShards is
     function changeMaxTransferAmount(uint256 _maxTransferAmount) external onlyRole(DEV_ROLE) {
         require(
             _maxTransferAmount >= MIN_MAX_TRANSFER_AMOUNT,
-            "New maximum transfer amount too low."
+            "New maximum transfer amount too low"
         );
 
         maxTransferAmount = _maxTransferAmount;
