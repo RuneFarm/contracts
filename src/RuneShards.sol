@@ -48,6 +48,9 @@ import "openzeppelin-contracts-v0.8/security/Pausable.sol";
 import "openzeppelin-contracts-v0.8/access/AccessControl.sol";
 import "openzeppelin-contracts-v0.8/utils/structs/EnumerableSet.sol";
 
+/**
+* @notice Rune Shards (RXS) is the governance token for the Rune ecosystem.
+*/
 contract RuneShards is
     ERC20,
     ERC20Permit,
