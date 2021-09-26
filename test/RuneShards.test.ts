@@ -858,6 +858,33 @@ describe("Rune Shards", async () => {
         })
     })
 
+    context("Trapped tokens", async () => {
+        it("should allow rescuing trapped tokens", async () => {
+            const oopsAmount = await runeToken.balanceOf(alice.address)
+
+            await runeToken.connect(alice).transfer(runeShards.address, oopsAmount)
+
+            expect(await runeToken.balanceOf(alice.address)).to.equal(0)
+            expect(await runeToken.balanceOf(runeShards.address)).to.equal(oopsAmount)
+
+            expect(
+                await runeShards.connect(dev).rescueTokens(runeToken.address)
+            ).to.emit(runeShards, "RescueTokens").withArgs(runeToken.address, dev.address, oopsAmount)
+
+            await runeToken.connect(dev).transfer(alice.address, await runeToken.balanceOf(dev.address))
+        })
+
+        it("shouldn't allow 'rescuing' RXS", async () => {
+            const rxsAmount = await runeShards.balanceOf(runeShards.address)
+
+            await expect(
+                runeShards.connect(dev).rescueTokens(runeShards.address)
+            ).to.be.revertedWith("RXS cannot be rescued")
+
+            expect(await runeShards.balanceOf(runeShards.address)).to.equal(rxsAmount)
+        })
+    })
+
     context("Dust", async () => {
         it("should leave dust when transferring full balance", async () => {
             await expectExcluded()
