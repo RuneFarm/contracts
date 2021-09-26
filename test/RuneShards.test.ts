@@ -295,7 +295,7 @@ describe("Rune Shards", async () => {
         it("should swap correctly", async () => {
             expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply)
 
-            const swapAmount = ethers.utils.parseEther("1000")
+            const swapAmount = ethers.utils.parseEther("200")
             const shardAmount = swapAmount.mul("10000")
 
             await runeToken.connect(alice).approve(runeShards.address, swapAmount)
@@ -323,11 +323,11 @@ describe("Rune Shards", async () => {
             ).to.emit(runeShards, "Swap").withArgs(alice.address, shardAmount)
             expect(await runeShards.totalSupply()).to.equal(runeShardsTotalSupply)
             
-            expect(await runeToken.balanceOf(deadAddress)).to.equal(runeBurnt.add(ethers.utils.parseEther("1000")).add(swapAmount))
-            expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply.sub(ethers.utils.parseEther("1000")).sub(swapAmount))
+            expect(await runeToken.balanceOf(deadAddress)).to.equal(runeBurnt.add(ethers.utils.parseEther("200")).add(swapAmount))
+            expect(await runeToken.balanceOf(alice.address)).to.equal(runeTotalSupply.sub(ethers.utils.parseEther("200")).sub(swapAmount))
 
-            expect(await runeShards.balanceOf(alice.address)).to.equal(ethers.utils.parseEther("1000").mul("10000").add(shardAmount))
-            expect(await runeShards.balanceOf(runeShards.address)).to.equal(runeShardsTotalSupply.sub(ethers.utils.parseEther("1000").mul("10000")).sub(shardAmount))
+            expect(await runeShards.balanceOf(alice.address)).to.equal(ethers.utils.parseEther("200").mul("10000").add(shardAmount))
+            expect(await runeShards.balanceOf(runeShards.address)).to.equal(runeShardsTotalSupply.sub(ethers.utils.parseEther("200").mul("10000")).sub(shardAmount))
         })
     })
 
