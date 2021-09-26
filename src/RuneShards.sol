@@ -125,7 +125,28 @@ contract RuneShards is
 
     /* SECTION: Constructor. */
 
-    constructor() ERC20("Rune Shards", "RXS") ERC20Permit("Rune Shards") {
+    /**
+     * @notice Setup Rune Shards.
+     *
+     * @dev This contract is designed to be used cross-chain.
+     *
+     * The home chain is the Binance Smart Chain. When deploying to BSC, the total supply
+     * will be minted to this contract, to allow Rune to be swapped for RXS at a 1:10000 ratio.
+     *
+     * When deploying on other chains, the constructor parameter `mintTo` will be the recipient
+     * of the total supply mint. This is to allow custodial contracts to act as cross-chain bridges.
+     *
+     * If `mintTo` is 0, the supply will be minted to the contract (as though deployed on BSC). This
+     * is to allow testing of how the contract will behave on BSC using automated test frameworks.
+     *
+     * @param mintTo The address to receive the minted supply if not deploying on BSC.
+     *  If 0, the minted supply will be sent to the contract for testing purposes.
+     */
+    constructor(address mintTo)
+        ERC20("Rune Shards", "RXS")
+        ERC20Permit("Rune Shards")
+    {
+        // Deployer gets admin role.
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
         // Add this contract to excluded so there are no fees on swap.
@@ -143,7 +164,10 @@ contract RuneShards is
             called, and so this is the maximum amount of RXS that can
             ever exist.
         */
-        super._mint(address(this), 192999312886826396393950000);
+        if (BSC_CHAIN_ID == block.chainid || address(0) == mintTo) {
+            mintTo = address(this);
+        }
+        super._mint(mintTo, 192999312886826396393950000);
     }
 
 
