@@ -208,7 +208,10 @@ contract RuneShards is
 
         uint256 balance = rune.balanceOf(BURN_ADDRESS);
 
-        rune.transferFrom(_msgSender(), BURN_ADDRESS, amount);
+        require(
+            rune.transferFrom(_msgSender(), BURN_ADDRESS, amount),
+            "Rune transfer failed"
+        );
 
         uint256 newBalance = rune.balanceOf(BURN_ADDRESS) - balance;
         uint256 swapAmount = newBalance * 10000;
@@ -389,7 +392,11 @@ contract RuneShards is
         );
 
         uint256 balance = token.balanceOf(address(this));
-        token.transfer(_msgSender(), balance);
+        
+        require(
+            token.transfer(_msgSender(), balance),
+            "Token transfer failed"
+        );
 
         emit RescueTokens(token, _msgSender(), balance);
     }
