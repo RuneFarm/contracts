@@ -1042,6 +1042,8 @@ describe("Rune Shards", async () => {
             const swapAmount = await runeToken.balanceOf(alice.address)
             const shardAmount = swapAmount.mul("10000")
 
+            await runeShards.connect(dev).changeMaxTransferAmount(shardAmount)
+
             await runeToken.connect(alice).approve(runeShards.address, swapAmount)
 
             expect(
