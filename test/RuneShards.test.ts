@@ -88,6 +88,8 @@ describe("Rune Shards", async () => {
 
             expect(await runeShards.totalSupply()).to.equal(runeShardsTotalSupply)
             expect(runeShardsTotalSupply).to.equal(BigNumber.from("192999312886826396393950000"))
+
+            expect(await runeShards.getPastTotalSupply(6)).to.equal(BigNumber.from("192999312886826396393950000"))
         }
     })
 
