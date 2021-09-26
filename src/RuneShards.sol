@@ -292,7 +292,10 @@ contract RuneShards is
      */
     function removeExcluded(address _reincluded) external onlyRole(DEV_ROLE) {
         // Don't allow this contract to be reincluded, so there are no fees on swap.
-        require(_reincluded != address(this), "Can't remove Rune Shards from exclusions");
+        require(
+            _reincluded != address(this),
+            "Can't remove Rune Shards from exclusions"
+        );
 
         excluded.remove(_reincluded);
     }
