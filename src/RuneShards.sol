@@ -97,7 +97,7 @@ contract RuneShards is
     /* SECTION: Private constants. */
 
     ///@notice The address to send burnt tokens to.
-    address private constant burnAddress = address(0xdEaD);
+    address private constant BURN_ADDRESS = address(0xdEaD);
 
 
     /* SECTION: Private fields. */
@@ -161,11 +161,11 @@ contract RuneShards is
     function swap(uint256 amount) external {
         require(block.chainid == 56 || block.chainid == 31337); // BSC or Hardhat testing only
 
-        uint256 balance = rune.balanceOf(burnAddress);
+        uint256 balance = rune.balanceOf(BURN_ADDRESS);
 
-        rune.transferFrom(_msgSender(), burnAddress, amount);
+        rune.transferFrom(_msgSender(), BURN_ADDRESS, amount);
 
-        uint256 newBalance = rune.balanceOf(burnAddress) - balance;
+        uint256 newBalance = rune.balanceOf(BURN_ADDRESS) - balance;
         uint256 swapAmount = newBalance * 10000;
 
         _approve(address(this), _msgSender(), swapAmount);
