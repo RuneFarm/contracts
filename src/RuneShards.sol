@@ -159,7 +159,10 @@ contract RuneShards is
      * @param amount Amount of RUNE to swap.
      */
     function swap(uint256 amount) external {
-        require(block.chainid == 56 || block.chainid == 31337); // BSC or Hardhat testing only
+        // Only allow swapping on home chain (BSC) or when testing.
+        require(
+            BSC_CHAIN_ID == block.chainid || HARDHAT_CHAIN_ID == block.chainid
+        );
 
         uint256 balance = rune.balanceOf(BURN_ADDRESS);
 
