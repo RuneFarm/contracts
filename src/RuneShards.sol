@@ -466,6 +466,10 @@ contract RuneShards is
     /**
      * @notice Moves `amount` of tokens from `sender` to `recipient`,
      * applying transfer and bot fees as appropriate.
+     *
+     * @param sender The sender of the tokens.
+     * @param recipient The recipient of the tokens.
+     * @param amount The amount to transfer (before fees).
      */
     function _transfer(
         address sender,
