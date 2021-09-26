@@ -387,6 +387,16 @@ describe("Rune Shards", async () => {
         })
     })
 
+    context("Transfer", async () => {
+        it("shouldn't allow too large transfers", async () => {        
+            const transferAmount = BigNumber.from("3000000000000000000010000")
+
+            await expect(
+                runeShards.connect(alice).transfer(deadAddress, transferAmount)
+            ).to.be.revertedWith("Requested transfer is above maximum transfer amount")
+        })
+    })
+
     context("Fee addresses and constraints", async () => {
         it("shouldn't allow zero vault address", async () => {
             await expect(
