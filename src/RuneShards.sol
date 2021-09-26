@@ -140,7 +140,7 @@ contract RuneShards is
             (192,999,312.886826396393950000)
 
             This is the only place in the contract that _mint is
-            called, and so this is the total amount of RXS that can
+            called, and so this is the maximum amount of RXS that can
             ever exist.
         */
         super._mint(address(this), 192999312886826396393950000);
