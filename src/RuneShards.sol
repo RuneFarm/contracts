@@ -335,6 +335,20 @@ contract RuneShards is
     }
 
     /**
+     * @notice This token cannot be minted outside of the constructor.
+     *  This would be the case without this function, but it makes it explicit.
+     *
+     * @param to Address to receive the minted token (ignored).
+     * @param amount Amount to mint (ignored).
+     */
+    function mint(address to, uint256 amount) external view onlyRole(DEV_ROLE) {
+        // Prevent unused parameter warnings.
+        to; amount;
+
+        revert("This token cannot be minted");
+    }
+
+    /**
      * @notice Remove an address from the set of addresses subject to bot fees.
      *
      * @param _bot The address to remove.
